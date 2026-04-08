@@ -14,11 +14,33 @@ CampusStays centralizes accommodation management with AI-driven dynamic pricing 
 
 - **Frontend:** Next.js app on Vercel (Home, Login, Signup, Dashboard, My Bookings)  
 - **Backend:** Node.js + Express + MongoDB Atlas (via Mongoose ORM)  
+  - **Architecture:** Enterprise-grade design with a decoupled architecture.
+  - **Design Patterns:** SOLID principles, Repository Pattern, Service Layer, Factory Pattern, and Dependency Injection.
 - **AI Services:** Flask microservice on Render  
   - Dynamic pricing  
   - Conversational AI Agent  
 - **Auth:** NextAuth.js with MongoDB (Admin & Guest roles)  
 - **Storage:** Cloudinary for image/file uploads  
+
+---
+
+## 2.1 Backend Architecture & Design Patterns
+
+The backend is built with scalability and maintainability in mind, adhering to modern software engineering best practices.
+
+### **SOLID Principles**
+- **Single Responsibility (SRP):** Each class (Service, Repository, Factory) has one reason to change.
+- **Open-Closed (OCP):** New features (like new token types or notification channels) can be added by extending classes without modifying existing code.
+- **Dependency Inversion (DIP):** High-level services depend on abstractions rather than low-level database models.
+
+### **Key Patterns**
+- **Dependency Injection (DI):** Managed via a central **Composition Root** (`backend/src/container/index.ts`). This wires all repositories and factories into the services, making the system highly testable and loosely coupled.
+- **Repository Pattern:** All data access logic is encapsulated within Repositories (e.g., `UserRepository`, `RoomRepository`). This abstracts the Mongoose/MongoDB logic away from the business layer.
+- **Service Layer Pattern:** Contains the core business logic. Services (e.g., `AuthService`, `BookingService`) coordinate between repositories and factories but are unaware of HTTP-specific logic.
+- **Factory Pattern:** Used to centralize the creation of complex objects:
+    - `TokenFactory`: Manages JWT lifecycle (Access/Refresh tokens).
+    - `CookieFactory`: Manages secure cookie configuration.
+    - `NotificationFactory`: Encapsulates the construction of various notification types.
 
 ---
 
@@ -51,10 +73,10 @@ CampusStays centralizes accommodation management with AI-driven dynamic pricing 
 | Layer       | Technologies                               |
 |-------------|---------------------------------------------|
 | Frontend    | Next.js, TailwindCSS, TanStack Query        |
-| Backend     | Node.js, Express.js                         |
-| Database    | MongoDB Atlas (Mongoose ORM)                |
+| Backend     | Node.js, Express.js (SOLID, DI, Factory)    |
+| Database    | MongoDB Atlas (Repository Pattern)          |
 | AI/ML       | Python, Flask, Scikit-learn, OpenAI/LLM API |
-| Auth        | NextAuth.js (RBAC)                          |
+| Auth        | NextAuth.js (RBAC), Token Factory           |
 | Storage     | Cloudinary                                  |
 | Hosting     | Vercel, Render, MongoDB Atlas, Cloudinary   |
 
@@ -83,6 +105,7 @@ CampusStays centralizes accommodation management with AI-driven dynamic pricing 
 
 1. Overview  
 2. System Architecture  
+   - 2.1 Backend Architecture & Design Patterns
 3. Key Features  
 4. Tech Stack  
 5. API Overview
